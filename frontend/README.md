@@ -120,7 +120,7 @@ You can optionally update this game play to increase the number of questions or 
 
 `GET '/categories/${id}/questions'`
 
-- Fetches questions for a cateogry specified by id request argument
+- Fetches questions for a category specified by id request argument
 - Request Arguments: `id` - integer
 - Returns: An object with questions for the specified category, total questions, and current category string
 
@@ -196,7 +196,7 @@ You can optionally update this game play to increase the number of questions or 
 
 ---
 
-`POST '/questions'`
+`POST '/questions/search'`
 
 - Sends a post request in order to search for a specific question by search term
 - Request Body:

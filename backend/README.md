@@ -24,6 +24,30 @@ pip install -r requirements.txt
 
 ### Set up the Database
 
+Create Environment Variables in Windows:
+
+```bash
+set FLASK_APP=flaskr
+set FLASK_ENV=development
+set DB_USER=YOUR_USER
+set DB_PASSWORD=YOUR_PASS
+set DB_HOST=localhost
+set DB_PORT=5432
+```
+
+Create Environment Variables in MacOS:
+
+```bash
+export FLASK_APP=flaskr
+export FLASK_ENV=development
+export DB_USER=YOUR_USER
+export DB_PASSWORD=YOUR_PASS
+export DB_HOST=localhost
+export DB_PORT=5432
+```
+
+Remenber to replace `YOUR_USER` and `YOUR_PASS` with your Postgres username and password.
+
 With Postgres running, create a `trivia` database:
 
 ```bash
@@ -69,24 +93,191 @@ One note before you delve into your tasks: for each endpoint, you are expected t
 
 ## Documenting your Endpoints
 
-You will need to provide detailed documentation of your API endpoints including the URL, request parameters, and the response body. Use the example below as a reference.
-
-### Documentation Example
-
-`GET '/api/v1.0/categories'`
-
+### `GET '/categories'`
+  
 - Fetches a dictionary of categories in which the keys are the ids and the value is the corresponding string of the category
 - Request Arguments: None
-- Returns: An object with a single key, `categories`, that contains an object of `id: category_string` key: value pairs.
+- Returns: An object with a single key, categories, that contains an object of id: category_string key:value pairs.
 
 ```json
 {
-  "1": "Science",
-  "2": "Art",
-  "3": "Geography",
-  "4": "History",
-  "5": "Entertainment",
-  "6": "Sports"
+  "success": true,
+  "categories": {
+    "1": "Science",
+    "2": "Art",
+    "3": "Geography",
+    "4": "History",
+    "5": "Entertainment",
+    "6": "Sports"
+  }
+}
+```
+
+### `GET '/questions?page=${integer}'`
+
+- Fetches a paginated set of questions, a total number of questions, all categories and current category string.
+- Request Arguments: `page` - integer
+- Returns: An object with 10 paginated questions, total questions, object including all categories, and current category string
+
+```json
+{
+  "success": true,
+  "questions": [
+    {
+      "id": 1,
+      "question": "What movie earned Tom Hanks his third straight Oscar nomination, in 1996?",
+      "answer": "Apollo 13",
+      "category": 5,
+      "difficulty": 4
+    },
+    {
+      "id": 2,
+      "question": "What actor did author Anne Rice first denounce, then praise in the role of her beloved Lestat?",
+      "answer": "Tom Cruise",
+      "category": 5,
+      "difficulty": 4
+    }
+  ],
+  "totalQuestions": 2,
+  "categories": {
+    "1": "Science",
+    "2": "Art",
+    "3": "Geography",
+    "4": "History",
+    "5": "Entertainment",
+    "6": "Sports"
+  },
+  "currentCategory": "History"
+}
+```
+
+### `DELETE /questions/${id}`
+
+- Deletes a specified question using the id of the question
+- Request Arguments: `id` - integer
+- Returns: Does not need to return anything besides the appropriate HTTP status code. Optionally can return the id of the question. If you are able to modify the frontend, you can have it remove the question using the id instead of refetching the questions.
+
+```json
+{
+  "success": true,
+  "message": "Question successfully deleted"
+}
+```
+
+### `POST /questions`
+
+- Sends a post request in order to add a new question
+- Request Body:
+
+```json
+{
+  "question": "Heres a new question string",
+  "answer": "Heres a new answer string",
+  "difficulty": 1,
+  "category": 3
+}
+```
+
+- Returns: Does not return any new data
+
+  ```json
+  {
+    "success": true,
+    "message": "Question successfully created"
+  }
+  ```
+
+### `POST /questions/search`
+  
+- Sends a post request in order to search for a specific question by search term
+- Request Body:
+
+```json
+{
+  "searchTerm": "this is the term the user is looking for"
+}
+```
+
+- Returns a json object with a list of questions, total number of questions, categories and current category.
+
+```json
+{
+  "success": true,
+  "questions": [
+    {
+      "id": 1,
+      "question": "What movie earned Tom Hanks his third straight Oscar nomination, in 1996?",
+      "answer": "Apollo 13",
+      "category": 5,
+      "difficulty": 4
+    },
+    {
+      "id": 2,
+      "question": "What actor did author Anne Rice first denounce, then praise in the role of her beloved Lestat?",
+      "answer": "Tom Cruise",
+      "category": 5,
+      "difficulty": 4
+    }
+  ],
+  "totalQuestions": 2,
+  "currentCategory": "Entertainment"
+}
+```
+
+### `GET '/categories/${id}/questions'`
+  
+- Fetches questions for a category specified by id request argument
+- Request Arguments: `id` - integer
+- Returns: An object with questions for the specified category, total questions, and current category string
+
+```json
+{
+  "success": true,
+  "questions": [
+    {
+      "id": 1,
+      "question": "What movie earned Tom Hanks his third straight Oscar nomination, in 1996?",
+      "answer": "Apollo 13",
+      "category": 5,
+      "difficulty": 4
+    },
+    {
+      "id": 2,
+      "question": "What actor did author Anne Rice first denounce, then praise in the role of her beloved Lestat?",
+      "answer": "Tom Cruise",
+      "category": 5,
+      "difficulty": 4
+    }
+  ],
+  "totalQuestions": 2,
+  "currentCategory": "History"
+}
+```
+
+### `POST /quizzes`
+
+- Sends a post request in order to get the next question
+- Request Body:
+
+```json
+{
+    'previous_questions': [1, 4, 20, 15]
+    quiz_category': 'current category'
+ }
+```
+
+- Returns: a single new question object
+
+```json
+{
+  "success": true,
+  "question": {
+    "id": 1,
+    "question": "What movie earned Tom Hanks his third straight Oscar nomination, in 1996?",
+    "answer": "Apollo 13",
+    "category": 5,
+    "difficulty": 4
+  }
 }
 ```
 

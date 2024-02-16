@@ -4,7 +4,11 @@ from flask_sqlalchemy import SQLAlchemy
 import json
 
 database_name = 'trivia'
-database_path = 'postgresql://{}/{}'.format('localhost:5432', database_name)
+database_username = os.environ['DB_USER']
+database_password = os.environ['DB_PASSWORD']
+db_host = os.environ['DB_HOST']
+db_port = os.environ['DB_PORT']
+database_path = f"postgresql://{database_username}:{database_password}@{db_host}:{db_port}/{database_name}"
 
 db = SQLAlchemy()
 
@@ -13,11 +17,11 @@ setup_db(app)
     binds a flask application and a SQLAlchemy service
 """
 def setup_db(app, database_path=database_path):
-    app.config["SQLALCHEMY_DATABASE_URI"] = database_path
-    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-    db.app = app
-    db.init_app(app)
-    db.create_all()
+        app.config["SQLALCHEMY_DATABASE_URI"] = database_path
+        app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+        db.app = app
+        db.init_app(app)
+        db.create_all()
 
 """
 Question
